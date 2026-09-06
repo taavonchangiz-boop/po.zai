@@ -1,0 +1,12 @@
+var R=require("../../../../../chunks/[turbopack]_runtime.js")("server/app/api/admin/gold/config/route.js")
+R.c("server/chunks/[root-of-the-server]__62c6a4bc._.js")
+R.c("server/chunks/[root-of-the-server]__dc2be300._.js")
+R.c("server/chunks/node_modules_next_f5199d09._.js")
+R.c("server/chunks/[root-of-the-server]__ef1db664._.js")
+R.c("server/chunks/node_modules_zod_v4_classic_external_fa90cebf.js")
+R.c("server/chunks/[root-of-the-server]__b5883d5c._.js")
+R.c("server/chunks/node_modules_next_dist_79f1aee4._.js")
+R.c("server/chunks/_eefaaa38._.js")
+R.c("server/chunks/_next-internal_server_app_api_admin_gold_config_route_actions_a7c49bef.js")
+R.m(9105)
+module.exports=R.m(9105).exports

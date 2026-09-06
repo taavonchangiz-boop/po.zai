@@ -1,0 +1,917 @@
+// =====================================================================
+// POSTYAR — Prisma schema (SQLite dev / MariaDB 10 prod-compatible)
+// All money fields are integer minor units (Rial). No floats.
+// All timestamps UTC. UI converts to Jalali.
+// =====================================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// ---------------------------------------------------------------------
+// AUTH & USERS
+// ---------------------------------------------------------------------
+model User {
+  id            String   @id @default(cuid())
+  email         String   @unique
+  username      String?  @unique
+  mobile        String?  @unique
+  passwordHash  String?
+  firstName     String
+  lastName      String
+  activityType  String   @default("other")   // personal/business/marketer/...
+  businessName  String   @default("")
+  role          String   @default("user")    // user | support | admin
+  isSuperAdmin  Boolean  @default(false)    // global super-admin flag; public registration never elevates privileges
+  status        String   @default("active")  // active | suspended
+  referralCode  String   @unique
+  referredById  String?
+  referredBy    User?    @relation("Referrals", fields: [referredById], references: [id])
+  referrals     User[]   @relation("Referrals")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  profile       Profile?
+  sessions      Session[]
+  otps          Otp[]
+  content       Content[]
+  destinations  Destination[]
+  bots          Bot[]
+  orders        Order[]
+  walletTxns    WalletTxn[]
+  ledger        LedgerEntry[]
+  subscriptions Subscription[]
+  notifications Notification[]
+  tickets       Ticket[]   @relation("UserTickets")
+  ticketReplies TicketReply[]
+  adCampaigns   AdCampaign[]
+  aiJobs        AiJob[]
+  botHistory    BotHistory[]
+  botLinkCodes  BotLinkCode[]
+  media         Media[]
+  auditLogs     AuditLog[]
+  supportActions Ticket[] @relation("SupportAssigned")
+  bankCards     BankCard[]
+  autoResponder AutoResponder?
+  goldBots      GoldBot[]
+  wooStores     WooCommerceStore[]
+  discountUsages DiscountUsage[]
+  referralRewardsGiven  ReferralReward[] @relation("ReferrerRewards")
+  referralRewardsReceived ReferralReward[] @relation("ReferredRewards")
+}
+
+model Profile {
+  userId        String   @id
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  avatarPath    String?
+  bio           String   @default("")
+  notifyPrefs   String   @default("{}") // JSON
+  updatedAt     DateTime @updatedAt
+}
+
+model Session {
+  id            String   @id @default(cuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash     String   @unique
+  ip            String?
+  userAgent     String?
+  expiresAt     DateTime
+  createdAt     DateTime @default(now())
+  revokedAt     DateTime?
+
+  @@index([userId])
+}
+
+model Otp {
+  id            String   @id @default(cuid())
+  mobile        String
+  codeHash      String   // hashed; never store plaintext
+  purpose       String   @default("login") // login | register | reset
+  attempts      Int      @default(0)
+  consumedAt    DateTime?
+  expiresAt     DateTime
+  createdAt     DateTime @default(now())
+
+  userId        String?
+  user          User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([mobile])
+}
+
+// ---------------------------------------------------------------------
+// CONTENT
+// ---------------------------------------------------------------------
+model Content {
+  id            String   @id @default(cuid())
+  ownerId       String
+  owner         User     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  title         String
+  body          String   @default("")
+  status        String   @default("draft") // draft|scheduled|queued|processing|delivered|failed|cancelled
+  mediaIds      String   @default("[]")     // JSON of Media.id
+  destinationIds String  @default("[]")     // JSON of Destination.id
+  buttonPresetId String?
+  scheduledAt   DateTime?
+  publishedAt   DateTime?
+  failureReason  String?
+  views          Int      @default(0) // analytics: post views
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  jobs          PublishJob[]
+  @@index([ownerId])
+  @@index([status])
+}
+
+model Media {
+  id            String   @id @default(cuid())
+  ownerId       String
+  owner         User     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  kind          String   // image|video
+  storagePath   String   // private storage path (randomized)
+  publicId      String   @unique // randomized filename
+  mime          String
+  sizeBytes     Int
+  width         Int?
+  height        Int?
+  createdAt     DateTime @default(now())
+}
+
+// ---------------------------------------------------------------------
+// DESTINATIONS (Telegram / Bale / Rubika)
+// ---------------------------------------------------------------------
+model Destination {
+  id            String   @id @default(cuid())
+  ownerId       String
+  owner         User     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  provider      String   // telegram|bale|rubika
+  label         String
+  botTokenEnc   String   // AES-GCM encrypted
+  chatId        String
+  config        String   @default("{}") // JSON
+  status        String   @default("active") // active|inactive|error
+  lastError     String?
+  lastCheckedAt DateTime?
+  views          Int      @default(0) // analytics: channel/profile views
+  clicks         Int      @default(0) // analytics: aggregate button clicks
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  buttons       GlassButton[]
+  jobs          PublishJob[]
+  botBots       Bot[]    @relation("BotDestinations")
+  @@index([ownerId])
+}
+
+model GlassButton {
+  id            String   @id @default(cuid())
+  destinationId String
+  destination   Destination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
+  label         String
+  url           String?
+  callbackData  String?
+  rowOrder      Int      @default(0)
+  enabled       Boolean  @default(true)
+  clicks        Int      @default(0) // analytics: per-button click counter
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  @@index([destinationId])
+}
+
+// ---------------------------------------------------------------------
+// PUBLISH QUEUE / WORKER
+// ---------------------------------------------------------------------
+model PublishJob {
+  id            String   @id @default(cuid())
+  contentId     String
+  content       Content  @relation(fields: [contentId], references: [id], onDelete: Cascade)
+  destinationId String
+  destination   Destination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
+  status        String   @default("queued") // queued|processing|delivered|failed|cancelled
+  runAt         DateTime @default(now())
+  lockedAt      DateTime?
+  lockedBy      String?
+  attempts      Int      @default(0)
+  maxAttempts   Int      @default(3)
+  idempotencyKey String  @unique
+  resultPayload String?  // JSON
+  // M-06: set immediately BEFORE the provider send. A row carrying this
+  // marker whose process died before the delivered/failed CAS proves an
+  // outbound attempt was in flight — at-least-once semantics are then
+  // observable and bounded by maxAttempts (provider APIs have no
+  // idempotent send, so exactly-once is not claimable).
+  deliveryAttemptedAt DateTime?
+  failureReason String?
+  deliveredAt   DateTime?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([status, runAt])
+  @@index([destinationId])
+}
+
+// ---------------------------------------------------------------------
+// PLANS / SUBSCRIPTIONS / QUOTA
+// ---------------------------------------------------------------------
+model Plan {
+  id            String   @id @default(cuid())
+  code          String   @unique
+  nameFa        String
+  descriptionFa String   @default("")
+  priceRials    Int      @default(0)
+  intervalMonths Int     @default(1)
+  quota         String   @default("{}") // JSON: { publishPerMonth, aiPerMonth, channels, automation, ... }
+  // Granular feature flags (JSON object of feature-key -> boolean/number).
+  // Keys mirror the dashboard sections so admins can enable exactly the
+  // modules a plan grants (e.g. { caption: true, smartReply: true, woo: false, gold: true, ... }).
+  features      String   @db.Text @default("{}")
+  // Marketing image for the plan card (public webp under /brand or /assets).
+  imageUrl      String?
+  // Optional percentage discount applied at checkout (0..100).
+  discountPct   Int      @default(0)
+  // Early-renewal discount: if the user renews within `renewalDiscountWindowDays`
+  // days before `endsAt`, this percentage is applied. 0 = no renewal discount.
+  renewalDiscountPct        Int  @default(0)
+  renewalDiscountWindowDays Int  @default(0)
+  sortOrder     Int      @default(0)
+  active        Boolean  @default(true)
+  isPublic      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  subscriptions Subscription[]
+  discounts     DiscountPlan[]
+}
+
+model Subscription {
+  id            String   @id @default(cuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  planId        String
+  plan          Plan     @relation(fields: [planId], references: [id])
+  status        String   @default("active") // active|expired|cancelled
+  startedAt     DateTime @default(now())
+  endsAt        DateTime
+  usedQuota     String   @default("{}") // JSON
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  // DB-level uniqueness for the "one live subscription per (user, plan)"
+  // invariant (P0.9). The key is "<userId>:<planId>" and is set ONLY on the
+  // active/renewable row for that plan; it is NULL on terminal rows. Both
+  // SQLite and MariaDB treat NULLs as distinct in unique indexes, so any
+  // number of historical rows may coexist while at most ONE live row per
+  // (user, plan) can ever exist - concurrent purchases converge on renewal.
+  activeKey     String?  @unique
+  @@index([userId])
+}
+
+// ---------------------------------------------------------------------
+// PAYMENT / WALLET / LEDGER
+// ---------------------------------------------------------------------
+model Order {
+  id            String   @id @default(cuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  kind          String   // subscription|wallet_credit|ad_campaign
+  amountRials   Int
+  planId        String?
+  descriptionFa String  @default("")
+  status        String   @default("pending") // pending|awaiting_payment|awaiting_review|paid|rejected|failed|expired
+  provider      String?  // card|bank|bale
+  providerRef   String?  // provider invoice/authority id
+  idempotencyKey String  @unique
+  metadata      String   @default("{}")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  ledger        LedgerEntry[]
+  walletTxns    WalletTxn[]
+  cardReceipt   CardTransferReceipt?
+  bankRef       BankGatewayRef?
+  baleRef       BalePaymentRef?
+  @@index([userId])
+  @@index([status])
+}
+
+model CardTransferReceipt {
+  id            String   @id @default(cuid())
+  orderId       String   @unique
+  order         Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  storagePath   String   // private storage
+  publicId      String   @unique
+  senderCardMask String? // masked
+  trackedSenderMobile String?
+  adminNotes    String?
+  reviewedBy    String?
+  reviewedAt    DateTime?
+  status        String   @default("pending") // pending|approved|rejected
+  createdAt     DateTime @default(now())
+}
+
+model BankGatewayRef {
+  id            String   @id @default(cuid())
+  orderId       String   @unique
+  order         Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  authority     String   @unique
+  mode          String   // direct|intermediary
+  verifyRefId   String?
+  traceNo       String?
+  paidAt        DateTime?
+  rawResponse   String?   // JSON for audit
+  createdAt     DateTime @default(now())
+}
+
+model BalePaymentRef {
+  id            String   @id @default(cuid())
+  orderId       String   @unique
+  order         Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  botId         String?  // which bot issued the invoice
+  chargeId      String?  @unique  // Bale successful_payment.charge_id
+  updateId      String?  @unique  // dedup key
+  currency      String?
+  providerPaymentChargeId String?
+  paidAt        DateTime?
+  rawPayload    String?  // sanitized JSON for audit
+  createdAt     DateTime @default(now())
+}
+
+model WalletTxn {
+  id            String   @id @default(cuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  amountRials   Int      // + credit, - debit
+  direction     String   // credit|debit
+  reason        String   // payment|refund|referral|admin_adjust|ad_campaign|subscription
+  orderId       String?
+  order         Order?   @relation(fields: [orderId], references: [id])
+  balanceAfter  Int
+  idempotencyKey String  @unique
+  createdAt     DateTime @default(now())
+  @@index([userId])
+  // V4 H-06 — O(1) latest-checkpoint balance lookup (id order == insert
+  // order; the latest row's balanceAfter IS the derived balance).
+  @@index([userId, id])
+}
+
+model LedgerEntry {
+  id            String   @id @default(cuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  orderId       String?
+  order         Order?   @relation(fields: [orderId], references: [id])
+  eventType     String   // payment|credit|debit|refund|referral_reward|admin_adjust|subscription
+  amountRials   Int      // signed
+  currency      String   @default("IRR")
+  idempotencyKey String  @unique
+  // Database-enforced financial invariants (C-03): when a ledger row
+  // represents an invariant-locked event, this column carries a stable
+  // key (e.g. "refund:<orderId>") and the UNIQUE index makes it
+  // IMPOSSIBLE for two concurrent transactions to both create the row.
+  // NULL on rows that carry no such invariant (payment, admin_adjust…).
+  refundKey     String?  @unique
+  createdAt     DateTime @default(now())
+  @@index([userId])
+}
+
+model BankCard {
+  id            String   @id @default(cuid())
+  userId        String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  cardNumberMask String  // stored masked only (1234-****-****-5678)
+  holderName   String
+  bankName     String
+  active       Boolean  @default(true)
+  createdAt    DateTime @default(now())
+}
+
+model Discount {
+  id            String   @id @default(cuid())
+  code          String   @unique
+  kind          String   // percent|fixed
+  value         Int      // percent: 0..100 ; fixed: rials
+  maxUses       Int      @default(0) // 0 = unlimited
+  uses          Int      @default(0)
+  perUserLimit  Int      @default(1)
+  expiresAt    DateTime?
+  active        Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  plans         DiscountPlan[]
+  usages        DiscountUsage[]
+}
+
+model DiscountPlan {
+  id            String   @id @default(cuid())
+  discountId    String
+  discount      Discount @relation(fields: [discountId], references: [id], onDelete: Cascade)
+  planId        String
+  plan          Plan     @relation(fields: [planId], references: [id])
+  @@unique([discountId, planId])
+}
+
+model DiscountUsage {
+  id            String   @id @default(cuid())
+  discountId    String
+  discount      Discount @relation(fields: [discountId], references: [id], onDelete: Cascade)
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  orderId       String?  @unique
+  createdAt     DateTime @default(now())
+  // NOTE (P1.8): the previous @@unique([discountId, userId]) silently made
+  // "perUserLimit > 1" unreachable (a user could never redeem the same code
+  // twice regardless of the configured limit). Per-user limits are now
+  // enforced transactionally in recordUsage (increment-first row lock,
+  // count check, rollback on rejection). The orderId unique guarantees a
+  // single usage row per (discount, order) so a retried order creation can
+  // never double-consume the cap for the same order.
+  @@index([discountId, userId])
+}
+
+// ---------------------------------------------------------------------
+// REFERRAL
+// ---------------------------------------------------------------------
+model ReferralReward {
+  id            String   @id @default(cuid())
+  referrerId    String
+  referrer      User     @relation("ReferrerRewards", fields: [referrerId], references: [id], onDelete: Cascade)
+  referredId    String   @unique // one reward per referred user
+  referred      User     @relation("ReferredRewards", fields: [referredId], references: [id], onDelete: Cascade)
+  amountRials   Int
+  status        String   @default("paid") // paid|reversed
+  idempotencyKey String  @unique
+  createdAt     DateTime @default(now())
+}
+
+// ---------------------------------------------------------------------
+// ADVERTISING
+// ---------------------------------------------------------------------
+model AdCampaign {
+  id            String   @id @default(cuid())
+  ownerId       String
+  owner         User     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  title         String
+  descriptionFa String   @default("")
+  link          String?
+  imagePath     String?  // public webp under /assets/ads/
+  // Placement key references AdPlacement.key (e.g. user_dashboard_top, sticky_bar, landing_hero, ...).
+  // The admin defines every placement via the AdPlacement table; this string ties a campaign to a slot.
+  placement     String   @default("user_dashboard_top")
+  placementRel  AdPlacement? @relation(fields: [placement], references: [key], onDelete: NoAction)
+  startAt       DateTime?
+  endAt         DateTime?
+  priceRials    Int      @default(0)
+  status        String   @default("pending") // pending|approved|running|completed|rejected|cancelled
+  impressions   Int      @default(0)
+  clicks        Int      @default(0)
+  adminNotes    String?
+  reviewedBy    String?
+  reviewedAt    DateTime?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  @@index([status])
+  @@index([placement])
+}
+
+// Admin-defined ad placements. The admin can create any number of slots
+// (e.g. "sticky_bar", "user_dashboard_top", "user_dashboard_sidebar",
+// "landing_hero", "plans_page_banner", ...) and assign campaigns to them.
+model AdPlacement {
+  key           String   @id // unique stable key, e.g. "sticky_bar"
+  labelFa       String
+  descriptionFa String   @default("")
+  // kind: "sticky_bar" | "banner_inline" | "sidebar_card" | "fullscreen" | "slider"
+  kind          String   @default("banner_inline")
+  // Recommended image dimensions (pixels) — shown to advertisers before they
+  // upload, so they can produce an image that fits the slot. 0 means "any".
+  recommendedWidth   Int  @default(0)
+  recommendedHeight  Int  @default(0)
+  // Max upload size in bytes (0 = no special limit, fall back to the global 5 MiB).
+  maxFileBytes Int      @default(0)
+  active        Boolean  @default(true)
+  sortOrder     Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  campaigns     AdCampaign[]
+}
+
+// ---------------------------------------------------------------------
+// AI
+// ---------------------------------------------------------------------
+model AiJob {
+  id            String   @id @default(cuid())
+  userId        String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  provider      String   // openai|gemini|grok|deepseek|anthropic|openrouter|mistral|together|ollama
+  model         String
+  task          String   // caption|text|reply|custom
+  prompt        String
+  output        String?
+  tokensIn      Int      @default(0)
+  tokensOut     Int      @default(0)
+  status        String   @default("completed") // queued|processing|completed|failed
+  failureReason String?
+  idempotencyKey String  @unique
+  createdAt     DateTime @default(now())
+  @@index([userId])
+}
+
+// ---------------------------------------------------------------------
+// GOLD
+// ---------------------------------------------------------------------
+model GoldPrice {
+  id            String   @id @default(cuid())
+  instrument    String   // 18k|emami|bahar_azadi|ounce
+  priceRials    Int
+  fetchedAt     DateTime @default(now())
+  source        String
+  @@index([instrument, fetchedAt])
+}
+
+model GoldBot {
+  id            String   @id @default(cuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  enabled       Boolean  @default(false)
+  instrument    String   @default("18k")
+  direction     String   @default("up") // up|down|both
+  thresholdPct  Int      @default(2)
+  intervalMin   Int      @default(15)
+  destinationId String?
+  lastFiredAt   DateTime?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+// ---------------------------------------------------------------------
+// WOOCOMMERCE
+// ---------------------------------------------------------------------
+model WooCommerceStore {
+  id            String   @id @default(cuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  storeUrl      String
+  consumerKeyEnc String
+  consumerSecretEnc String
+  status        String   @default("active")
+  lastSyncAt    DateTime?
+  createdAt     DateTime @default(now())
+  @@index([userId])
+}
+
+// ---------------------------------------------------------------------
+// TICKETS
+// ---------------------------------------------------------------------
+model Ticket {
+  id            String   @id @default(cuid())
+  operationKey  String?  @unique // deterministic workflow action idempotency key
+  userId        String
+  user          User     @relation("UserTickets", fields: [userId], references: [id], onDelete: Cascade)
+  subject       String
+  category      String   @default("general")
+  departmentId  String?
+  department    TicketDepartment? @relation(fields: [departmentId], references: [id], onDelete: SetNull)
+  status        String   @default("open") // open|answered|closed
+  priority      String   @default("normal") // low|normal|high|urgent
+  assignedToId  String?
+  assignedTo    User?    @relation("SupportAssigned", fields: [assignedToId], references: [id])
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  replies       TicketReply[]
+  @@index([userId])
+  @@index([departmentId])
+  @@index([status])
+}
+
+// Admin-defined ticket departments (e.g. "فنی", "مالی", "فروش").
+// Admin can CRUD these, set priority ordering, and assign tickets to them.
+model TicketDepartment {
+  id            String   @id @default(cuid())
+  nameFa        String   @unique
+  descriptionFa String   @default("")
+  // Lower number = higher priority in lists.
+  priority      Int      @default(100)
+  active        Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  tickets       Ticket[]
+}
+
+model TicketReply {
+  id            String   @id @default(cuid())
+  ticketId      String
+  ticket        Ticket   @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  body          String
+  isStaff       Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  attachments   TicketAttachment[]
+  @@index([ticketId])
+}
+
+// Image / ZIP attachments on ticket replies. Only these two MIME groups
+// are allowed; max sizes enforced in the upload route (image ≤ 5 MiB, zip ≤ 10 MiB).
+model TicketAttachment {
+  id            String   @id @default(cuid())
+  replyId       String
+  reply         TicketReply @relation(fields: [replyId], references: [id], onDelete: Cascade)
+  fileName      String
+  mime          String   // image/* | application/zip
+  sizeBytes     Int
+  storagePath   String   // under /storage/tickets/
+  createdAt     DateTime @default(now())
+  @@index([replyId])
+}
+
+// ---------------------------------------------------------------------
+// NOTIFICATIONS
+// ---------------------------------------------------------------------
+model Notification {
+  id            String   @id @default(cuid())
+  operationKey  String?  @unique // deterministic workflow action idempotency key
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category      String   // publish|payment|subscription|referral|ad|ticket|gold|woo|security|system
+  titleFa       String
+  bodyFa        String
+  link          String?
+  readAt        DateTime?
+  createdAt     DateTime @default(now())
+  @@index([userId])
+}
+
+// Admin-segmented broadcast notifications. One BroadcastNotification row is
+// the template + audience; the actual per-user rows are fanned out into
+// Notification when the admin sends (or lazily via a worker). Audience can
+// be: "all" | "single" | "plan" | "plans" (multi-plan).
+model BroadcastNotification {
+  id            String   @id @default(cuid())
+  category      String
+  titleFa       String
+  bodyFa        String
+  link          String?
+  // "all" | "single" | "plan" | "plans"
+  audienceType  String   @default("all")
+  // JSON. For "single": { userId }. For "plan": { planId }. For "plans": { planIds: [] }.
+  audienceMeta  String   @default("{}")
+  sentById      String?
+  sentAt        DateTime @default(now())
+  recipientCount Int    @default(0)
+  @@index([sentAt])
+}
+
+// ---------------------------------------------------------------------
+// GOLD PRICE CONFIG
+// ---------------------------------------------------------------------
+// Admin-configurable source for gold prices. Either a custom token/JSON
+// endpoint OR one of the built-in free platforms (selectable).
+model GoldPriceConfig {
+  id            String   @id @default(cuid())
+  // "free_talaapi" | "free_tgju" | "free_bonmarket" | "custom_json" | "custom_token"
+  source        String   @default("free_talaapi")
+  // For custom_json: full URL returning JSON. For custom_token: auth bearer.
+  endpoint      String?
+  token         String?  // encrypted at rest by the crypto layer
+  // JSONPath-like selectors to extract each instrument's price from the response.
+  selector18k      String?
+  selectorEmami    String?
+  selectorBahar    String?
+  selectorOunce    String?
+  refreshMinutes   Int      @default(5)
+  active        Boolean  @default(true)
+  updatedAt    DateTime @updatedAt
+}
+
+// ---------------------------------------------------------------------
+// BOT BUILDER
+// ---------------------------------------------------------------------
+model Bot {
+  id            String   @id @default(cuid())
+  ownerId       String
+  owner         User     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  provider      String   // telegram|bale|rubika
+  name          String
+  username      String?
+  botTokenEnc   String   // AES-GCM
+  status        String   @default("inactive") // active|inactive|error
+  lastError     String?
+  webhookSecret String?  // not exposed via URL; hmac of incoming
+  config        String   @default("{}") // JSON: welcome, menu, commands, ...
+  destinationId String?
+  destination   Destination? @relation("BotDestinations", fields: [destinationId], references: [id])
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  linkCodes     BotLinkCode[]
+  history       BotHistory[]
+  workflows     BotWorkflow[]
+  inboundEvents BotInboundEvent[]
+  @@index([ownerId])
+}
+
+model BotWorkflow {
+  id            String   @id @default(cuid())
+  botId         String
+  bot           Bot      @relation(fields: [botId], references: [id], onDelete: Cascade)
+  name          String
+  enabled       Boolean  @default(true)
+  steps         String   @default("[]") // JSON
+  triggerKind   String   @default("message") // message|command|callback
+  triggerValue  String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  runs          BotWorkflowRun[]
+}
+
+model BotLinkCode {
+  id            String   @id @default(cuid())
+  botId         String
+  bot           Bot      @relation(fields: [botId], references: [id], onDelete: Cascade)
+  userId        String?
+  user          User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  codeHash      String   @unique
+  expiresAt     DateTime
+  consumedAt    DateTime?
+  consumedByProviderUserId String?
+  // DB-level identity-binding invariant (P1.3): "<botId>:<providerUserId>"
+  // set atomically at consume time, NULL while unconsumed. Guarantees one
+  // provider identity binds to at most ONE link code (one POSTYAR account)
+  // per bot - concurrent consume attempts cannot silently rebind.
+  bindingKey    String?  @unique
+  createdAt     DateTime @default(now())
+  @@index([botId])
+}
+
+model BotHistory {
+  id            String   @id @default(cuid())
+  operationKey  String?  @unique // deterministic outbound workflow operation key
+  botId         String
+  bot           Bot      @relation(fields: [botId], references: [id], onDelete: Cascade)
+  userId        String?
+  user          User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  direction     String   // inbound|outbound
+  providerUserId String?
+  text          String
+  raw           String?  // sanitized JSON
+  // V4 H-04 — the inbound history row is tied to the durable event
+  // identity; the UNIQUE index makes persistInboundOnce truly idempotent
+  // at the DATABASE level (crash/retry-safe, no preflight reads).
+  inboundEventId String? @unique
+  // V5 H-04 — durable OUTBOUND delivery state machine. Every outbound
+  // row is written BEFORE the provider send as `pending`, then updated
+  // to exactly one of: `sent` (provider confirmed + providerMessageId
+  // kept), `failed` (provider definitively refused), or `uncertain`
+  // (timeout/network ambiguity — delivery may or may not have happened;
+  // NEVER replayed as-if-original and NEVER reported as success).
+  // A crash between a successful send and the post-send update leaves
+  // the row `pending` — auditable evidence of a possibly-delivered
+  // message instead of a silently lost history row.
+  deliveryStatus String?  // outbound only: pending|sent|failed|uncertain
+  providerMessageId String? // provider's message id when it confirmed delivery
+  // V5 H-04 — workflow-step attribution: lets a workflow retry resolve
+  // the durable fate of a step's outbound message (skip already-sent,
+  // re-send only definitively-failed) instead of re-sending every step.
+  workflowId String?
+  stepId     String?
+  createdAt     DateTime @default(now())
+  @@index([botId])
+  @@index([botId, workflowId, stepId])
+}
+
+// C-04/H-03 — DURABLE inbound-event inbox (single authoritative dedup
+// owner). The previous volatile claim (cache INCR with TTL) was
+// at-most-once: a crash between the claim and workflow completion made
+// the provider's retry land on an existing claim and be dropped
+// forever, and without REDIS_URL multi-process deployments collapsed
+// per-process. The DB row below is the authoritative event state:
+//   * UNIQUE (botId, provider, externalEventId) collapses duplicates.
+//   * status carries received → processing → completed | failed → dead.
+//   * leaseUntil + CAS takeover recover crashed/stale processing.
+//   * failed events with attempts < max are retryable (provider
+//     redelivery or the bounded recovery scan in the webhook layer).
+// The sanitized provider payload is persisted so a recovery pass can
+// re-execute the event without a live redelivery.
+model BotInboundEvent {
+  id              String    @id @default(cuid())
+  botId           String
+  bot             Bot       @relation(fields: [botId], references: [id], onDelete: Cascade)
+  provider        String    // telegram|bale|rubika
+  externalEventId String    // provider update_id / message_id (string)
+  status          String    @default("received") // received|processing|completed|failed|dead
+  attempts        Int       @default(0)
+  leaseUntil      DateTime?
+  // V5 C-03 — lease OWNER (fencing token). Set on every claim; renewal,
+  // completion and failure writes are gated on it so a zombie worker
+  // whose event was taken over can no longer renew/complete/fail the
+  // row it lost.
+  lockedBy        String?
+  // V4 H-02 — durable retry schedule: exponential backoff + jitter is
+  // persisted so recovery NEVER hot-loops a just-failed event and
+  // multi-instance deployments honor the same schedule.
+  nextRetryAt     DateTime?
+  lastError       String?
+  payload         String?   // sanitized JSON of the raw update (recovery input)
+  // V4 H-03 — explicit truncation marker: a payload that exceeded the
+  // bounded representation is NEVER replayed as though it were original.
+  payloadTruncated Boolean  @default(false)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  completedAt     DateTime?
+  workflowRuns    BotWorkflowRun[]
+
+  @@unique([botId, provider, externalEventId])
+  @@index([botId, status, leaseUntil])
+  @@index([botId, updatedAt])
+}
+
+// Per-workflow execution record for one inbound event: unique
+// (eventId, workflowId) guarantees each intended workflow executes at
+// most once per event even across crashes and recovery passes; failed
+// runs are retryable while completed runs never repeat.
+model BotWorkflowRun {
+  id          String          @id @default(cuid())
+  eventId     String
+  event       BotInboundEvent @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  workflowId  String
+  workflow    BotWorkflow     @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+  workflowVersion String?      // immutable workflow definition version bound to this run
+  status      String          @default("pending") // pending|processing|completed|failed|dead (V6 C-01: claim enters processing; completed immutable; dead terminal at max attempts)
+  attempts    Int             @default(0)
+  // V4 H-01 — per-workflow execution lease (same duration as the parent
+  // event lease, renewed by a live worker): a claimed run cannot be
+  // stolen while its worker is alive; a crashed run's lease expires and
+  // the run becomes claimable again. Completed runs are immutable.
+  leaseUntil  DateTime?
+  // V5 C-03 — run lease owner (fencing token), same semantics as the
+  // parent event's lockedBy: only the worker that WON the CAS claim may
+  // renew, complete or fail the run.
+  lockedBy    String?
+  // V5 H-04 — per-step resume cursor (JSON): maps stepId → { next,
+  // outbound history id } so a retry after a crash/failure resumes the
+  // workflow from the interrupted step instead of re-sending every
+  // already-delivered step (duplicate-message vector).
+  cursorJson  String?
+  lastError   String?
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  @@unique([eventId, workflowId])
+  @@index([workflowId])
+}
+
+model AutoResponder {
+  id            String   @id @default(cuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  enabled       Boolean  @default(false)
+  destinationId String?
+  rules         String   @default("[]") // JSON
+  fallbackFa    String   @default("")
+  aiProvider    String?
+  aiModel       String?
+  loopGuardSeconds Int  @default(60)
+  dailyLimit    Int      @default(100)
+  usedToday     Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  @@unique([userId])
+}
+
+// ---------------------------------------------------------------------
+// AUDIT / OBSERVABILITY
+// ---------------------------------------------------------------------
+model AuditLog {
+  id            String   @id @default(cuid())
+  userId        String?
+  user          User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  actor         String   // user|system|admin|provider|webhook
+  action        String
+  targetType    String?
+  targetId      String?
+  ip            String?
+  meta          String   @default("{}") // sanitized JSON
+  createdAt     DateTime @default(now())
+  @@index([userId])
+  @@index([action])
+}
+
+model SystemSetting {
+  id            String   @id @default(cuid())
+  key           String   @unique
+  value         String
+  updatedAt     DateTime @updatedAt
+}
+
+// ---------------------------------------------------------------------
+// HEALTH
+// ---------------------------------------------------------------------
+model HealthCheck {
+  id            String   @id @default(cuid())
+  component     String   // app|db|redis|queue|worker|storage|provider
+  status        String   // ok|warn|down
+  message       String?
+  checkedAt     DateTime @default(now())
+  @@index([component, checkedAt])
+}

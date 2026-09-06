@@ -1,0 +1,3 @@
+{
+  "/api/woo/stores/[id]/sync/route": "app/api/woo/stores/[id]/sync/route.js"
+}

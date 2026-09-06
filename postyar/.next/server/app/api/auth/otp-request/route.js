@@ -1,0 +1,12 @@
+var R=require("../../../../chunks/[turbopack]_runtime.js")("server/app/api/auth/otp-request/route.js")
+R.c("server/chunks/[root-of-the-server]__5fa667c9._.js")
+R.c("server/chunks/[root-of-the-server]__dc2be300._.js")
+R.c("server/chunks/node_modules_next_f5199d09._.js")
+R.c("server/chunks/[root-of-the-server]__ef1db664._.js")
+R.c("server/chunks/node_modules_zod_v4_classic_external_fa90cebf.js")
+R.c("server/chunks/[root-of-the-server]__b5883d5c._.js")
+R.c("server/chunks/node_modules_next_dist_79f1aee4._.js")
+R.c("server/chunks/_eefaaa38._.js")
+R.c("server/chunks/_next-internal_server_app_api_auth_otp-request_route_actions_39e54ec4.js")
+R.m(1756)
+module.exports=R.m(1756).exports

@@ -1,0 +1,8 @@
+2026-09-06 15:13:22
+Error: Call to undefined method WHCM\Core\Auth::requireLogin() in /home/asovinir/public_html/app/Controllers/MainController.php:2635
+
+#0 [internal function]: WHCM\Controllers\MainController->getPushStatus()
+#1 /home/asovinir/public_html/app/Core/Router.php(98): call_user_func_array()
+#2 /home/asovinir/public_html/app/Core/Router.php(76): WHCM\Core\Router::execute()
+#3 /home/asovinir/public_html/public/index.php(189): WHCM\Core\Router::dispatch()
+#4 {main}

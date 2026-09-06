@@ -1,0 +1,129 @@
+@font-face {
+    font-family: 'Vazirmatn';
+    src: url('../fonts/Vazirmatn-Thin.woff2') format('woff2');
+    font-weight: 100;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Vazirmatn';
+    src: url('../fonts/Vazirmatn-Light.woff2') format('woff2');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Vazirmatn';
+    src: url('../fonts/Vazirmatn-Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Vazirmatn';
+    src: url('../fonts/Vazirmatn-Medium.woff2') format('woff2');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Vazirmatn';
+    src: url('../fonts/Vazirmatn-SemiBold.woff2') format('woff2');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Vazirmatn';
+    src: url('../fonts/Vazirmatn-Bold.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Vazirmatn';
+    src: url('../fonts/Vazirmatn-ExtraBold.woff2') format('woff2');
+    font-weight: 800;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Vazirmatn';
+    src: url('../fonts/Vazirmatn-Black.woff2') format('woff2');
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* ==========================================================================
+   فایل استایل‌های مشترک و قابل استفاده مجدد (Shared/Reusable CSS)
+   سامانه مدیریت کانال‌ها و انتشار خودکار پُست‌یار
+   شامل: فونت Vazirmatn، تقویم شمسی جلالی، انیمیشن‌ها، کلاس‌های عمومی
+   ========================================================================== */
+
+/* ===== ظاهر شیک و مدرن هماهنگ با تم تاریک پُست‌یار برای تقویم شمسی ===== */
+.jdp-container {
+    background: #0f172a !important;
+    border: 1px solid #6366f1 !important;
+    border-radius: 16px !important;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8), 0 0 25px rgba(99, 102, 241, 0.25) !important;
+    color: #e2e8f0 !important;
+    font-family: 'Vazirmatn', sans-serif !important;
+    z-index: 9999999 !important;
+    padding: 0.85rem !important;
+}
+.jdp-container .jdp-icon-plus, .jdp-container .jdp-icon-minus {
+    fill: #818cf8 !important;
+}
+.jdp-container .jdp-months, .jdp-container .jdp-years {
+    background: #1e293b !important;
+    border-radius: 10px !important;
+}
+.jdp-container .jdp-day, .jdp-container .jdp-month, .jdp-container .jdp-year {
+    border-radius: 8px !important;
+    transition: all 0.2s ease !important;
+}
+.jdp-container .jdp-day:hover, .jdp-container .jdp-month:hover, .jdp-container .jdp-year:hover {
+    background: rgba(99, 102, 241, 0.25) !important;
+    color: #ffffff !important;
+    transform: scale(1.05) !important;
+}
+.jdp-container .jdp-day.selected, .jdp-container .jdp-month.selected, .jdp-container .jdp-year.selected {
+    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%) !important;
+    color: #ffffff !important;
+    font-weight: 900 !important;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.5) !important;
+}
+.jdp-container .jdp-day.today {
+    border: 2px solid #34d399 !important;
+    color: #34d399 !important;
+}
+.jdp-container .jdp-footer {
+    background: #1e293b !important;
+    border-top: 1px dashed #334155 !important;
+    border-radius: 0 0 12px 12px !important;
+}
+.jdp-container .jdp-btn-today {
+    background: #10b981 !important;
+    color: white !important;
+    border-radius: 8px !important;
+    font-weight: bold !important;
+    padding: 0.35rem 1rem !important;
+}
+
+/* ===== حذف فلش‌های بالا/پایین از اینپوت‌های عددی ===== */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+/* ===== دکمه بانک آبی ===== */
+.btn-bluebank {
+    border-color: #3b82f6 !important;
+    color: #ffffff !important;
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%) !important;
+}

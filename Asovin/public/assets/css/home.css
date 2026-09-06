@@ -1,0 +1,489 @@
+/* ==========================================================================
+   فایل استایل اختصاصی صفحه اصلی لندینگ (Home Page Stylesheet)
+   سامانه مدیریت کانال‌ها و انتشار خودکار پُست‌یار
+   ========================================================================== */
+
+/* فونت Vazirmatn از فایل محلی (components.css) بارگذاری می‌شود */
+
+* {
+    font-family: 'Vazirmatn', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #0a0a0a;
+    color: #f8fafc;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+html { 
+    scroll-behavior: smooth; 
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar { 
+    width: 8px; 
+}
+::-webkit-scrollbar-track { 
+    background: #0a0a0a; 
+}
+::-webkit-scrollbar-thumb { 
+    background: #6366f1; 
+    border-radius: 4px; 
+}
+::-webkit-scrollbar-thumb:hover { 
+    background: #4f46e5; 
+}
+
+/* Gradient Animations */
+@keyframes gradientShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+.gradient-animate {
+    background-size: 200% 200%;
+    animation: gradientShift 8s ease infinite;
+}
+
+/* Floating Animation */
+@keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    33% { transform: translateY(-8px) rotate(1deg); }
+    66% { transform: translateY(6px) rotate(-1deg); }
+}
+.float-animation { 
+    animation: float 6s ease-in-out infinite; 
+}
+.float-animation-delay { 
+    animation: float 6s ease-in-out infinite; 
+    animation-delay: -2s; 
+}
+.float-animation-delay2 { 
+    animation: float 6s ease-in-out infinite; 
+    animation-delay: -4s; 
+}
+
+/* Pulse Glow */
+@keyframes pulseGlow {
+    0%, 100% { box-shadow: 0 0 20px rgba(99,102,241,0.35); }
+    50% { box-shadow: 0 0 40px rgba(99,102,241,0.65); }
+}
+.pulse-glow { 
+    animation: pulseGlow 3s ease-in-out infinite; 
+}
+
+/* Scroll Reveal */
+.reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+
+/* Glassmorphism */
+.glass {
+    background: rgba(255,255,255,0.04);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.08);
+}
+.glass-light {
+    background: rgba(255,255,255,0.07);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255,255,255,0.12);
+}
+
+/* Mesh Gradient Background */
+.mesh-bg {
+    background:
+        radial-gradient(ellipse at 15% 20%, rgba(99,102,241,0.18) 0%, transparent 45%),
+        radial-gradient(ellipse at 85% 75%, rgba(236,72,153,0.14) 0%, transparent 45%),
+        radial-gradient(ellipse at 50% 50%, rgba(14,165,233,0.1) 0%, transparent 50%),
+        #0a0a0a;
+}
+
+/* Noise Texture */
+.noise::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Card Hover Glow */
+.card-glow {
+    position: relative;
+    overflow: hidden;
+}
+.card-glow::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(99,102,241,0.12) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+}
+.card-glow:hover::before {
+    opacity: 1;
+}
+
+/* Border Gradient for Featured Card */
+.border-gradient {
+    background: linear-gradient(#111115, #111115) padding-box,
+                linear-gradient(135deg, #6366f1, #ec4899, #3b82f6) border-box;
+    border: 2px solid transparent !important;
+}
+
+/* Marquee */
+@keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+.marquee-track {
+    animation: marquee 28s linear infinite;
+}
+.marquee-track:hover {
+    animation-play-state: paused;
+}
+
+/* ===== کارت‌های فشرده Uiverse Cobp/old-cat-57 + باکس‌های نئونی ===== */
+.plans-container {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    gap: 1.25rem;
+    padding: 1rem 0.5rem 1.5rem;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: #6366f1 #0a0a0a;
+    justify-content: flex-start;
+}
+.plans-container::-webkit-scrollbar { height: 6px; }
+.plans-container::-webkit-scrollbar-thumb { background:#6366f1; border-radius:999px; }
+.plans-container::-webkit-scrollbar-track { background: rgba(255,255,255,0.06); border-radius:999px; }
+.plans-container .plan-card {
+    flex: 0 0 275px;
+    min-width: 275px;
+    max-width: 275px;
+    scroll-snap-align: start;
+}
+@media (max-width: 768px) {
+    .plans-container { gap: 1rem; padding: 0.5rem 0.75rem 1rem; }
+    .plans-container .plan-card { flex: 0 0 78vw; min-width: 78vw; max-width: 78vw; }
+}
+@media (min-width: 1200px) {
+    .plans-container { justify-content: center; }
+}
+
+.plan-card {
+    background: linear-gradient(145deg, rgba(17, 17, 24, 0.85) 0%, rgba(13, 13, 20, 0.95) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 18px;
+    padding: 1.15rem 1rem;
+    text-align: right;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
+}
+
+.plan-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(99, 102, 241, 0.6);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.7), 0 0 25px rgba(99, 102, 241, 0.18);
+}
+
+.plan-card-img-wrapper {
+    position: relative;
+    overflow: hidden;
+    border-radius: 14px;
+    margin-bottom: 0.8rem;
+    background: #0b0b10;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    height: 110px;
+}
+
+.plan-card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+}
+
+.plan-card:hover .plan-card-img {
+    transform: scale(1.07);
+}
+
+.neon-badges-overlay {
+    position: absolute;
+    inset: 0;
+    padding: 0.55rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-start;
+    gap: 0.3rem;
+    background: linear-gradient(0deg, rgba(10, 10, 16, 0.92) 0%, rgba(10, 10, 16, 0.15) 75%);
+    pointer-events: none;
+    z-index: 5;
+}
+
+.neon-glow-badge {
+    font-size: 0.73rem;
+    font-weight: 850;
+    padding: 0.22rem 0.55rem;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    letter-spacing: 0.2px;
+    text-shadow: 0 0 10px currentColor;
+    animation: neonPulse 2s infinite alternate;
+}
+
+.neon-badge-pink {
+    background: rgba(236, 72, 153, 0.25);
+    color: #f472b6;
+    border: 1px solid rgba(236, 72, 153, 0.85);
+    box-shadow: 0 0 14px rgba(236, 72, 153, 0.65), inset 0 0 8px rgba(236, 72, 153, 0.35);
+}
+
+.neon-badge-emerald {
+    background: rgba(16, 185, 129, 0.25);
+    color: #34d399;
+    border: 1px solid rgba(16, 185, 129, 0.85);
+    box-shadow: 0 0 14px rgba(16, 185, 129, 0.65), inset 0 0 8px rgba(16, 185, 129, 0.35);
+}
+
+.neon-badge-cyan {
+    background: rgba(6, 182, 212, 0.25);
+    color: #22d3ee;
+    border: 1px solid rgba(6, 182, 212, 0.85);
+    box-shadow: 0 0 14px rgba(6, 182, 212, 0.65), inset 0 0 8px rgba(6, 182, 212, 0.35);
+}
+
+@keyframes neonPulse {
+    0% { filter: drop-shadow(0 0 2px currentColor); }
+    100% { filter: drop-shadow(0 0 9px currentColor); }
+}
+
+.plan-card h3 {
+    font-size: 1.05rem;
+    font-weight: 850;
+    color: #ffffff;
+    margin: 0.3rem 0 0.5rem 0;
+    text-align: center;
+}
+
+.plan-card ul {
+    list-style: none;
+    padding: 0;
+    margin: 0.6rem 0 1.1rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+}
+
+.plan-card ul li {
+    font-size: 0.78rem;
+    color: #cbd5e1;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.plan-card.recommended {
+    border-color: rgba(99, 102, 241, 0.6);
+    background: linear-gradient(145deg, rgba(23, 23, 38, 0.9) 0%, rgba(13, 13, 20, 0.95) 100%);
+}
+
+.plan-card.featured-plan {
+    border: 2px solid #f59e0b !important;
+    background: linear-gradient(145deg, rgba(35, 25, 15, 0.9) 0%, rgba(15, 15, 22, 0.95) 100%) !important;
+    box-shadow: 0 12px 35px rgba(245, 158, 11, 0.25), 0 0 20px rgba(245, 158, 11, 0.15) !important;
+    transform: scale(1.03) translateY(-4px);
+    z-index: 5;
+}
+
+.plan-card.featured-plan::before {
+    content: "⭐ پیشنهاد ویژه پُست‌یار";
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    color: #ffffff;
+    font-size: 0.68rem;
+    font-weight: bold;
+    padding: 0.2rem 0.55rem;
+    border-radius: 20px;
+    box-shadow: 0 3px 8px rgba(245, 158, 11, 0.4);
+    z-index: 10;
+}
+
+/* ===== مدال‌های احراز هویت (Modals) ===== */
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    background: rgba(10, 10, 10, 0.85);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.modal.show {
+    display: flex;
+    opacity: 1;
+}
+
+.modal-content {
+    position: relative;
+    width: 100%;
+    max-width: 480px;
+    background: rgba(22, 22, 28, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 24px;
+    padding: 2.25rem 2rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 40px rgba(99, 102, 241, 0.15);
+    transform: scale(0.95);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modal.show .modal-content {
+    transform: scale(1);
+}
+
+.form-group {
+    margin-bottom: 1.25rem;
+    text-align: right;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.85rem;
+    color: #cbd5e1;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.form-group input {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 12px;
+    padding: 0.75rem 1rem;
+    color: #ffffff;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #6366f1;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+@media (max-width: 640px) {
+    .form-row { 
+        grid-template-columns: 1fr; 
+        gap: 0; 
+    }
+}
+
+.close-btn {
+    position: absolute;
+    top: 1.25rem;
+    left: 1.25rem;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #94a3b8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 1.1rem;
+}
+
+.close-btn:hover {
+    background: rgba(239, 68, 68, 0.2);
+    border-color: rgba(239, 68, 68, 0.4);
+    color: #ef4444;
+}
+
+/* ===== FAQ Accordion ===== */
+.faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+    opacity: 0;
+}
+
+.faq-item.open .faq-answer {
+    max-height: 250px;
+    opacity: 1;
+}
+
+.faq-item.open .faq-icon {
+    transform: rotate(180deg);
+    color: #6366f1;
+}
+
+/* ===== Plans Container Grid Override (for landing page pricing) ===== */
+.plans-container {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)) !important;
+    gap: 1.75rem !important;
+    align-items: stretch !important;
+    width: 100% !important;
+}
+@media (max-width: 1100px) and (min-width: 768px) {
+    .plans-container {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+}
+@media (max-width: 767px) {
+    .plans-container {
+        grid-template-columns: 1fr !important;
+    }
+}

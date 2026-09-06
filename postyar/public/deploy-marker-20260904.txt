@@ -1,0 +1,4 @@
+POSTYAR RELEASE 2026-09-04 STRICT FINAL
+Host package: balrobtelbot + Asovin UI/auth integration
+Startup: app.js -> boot.js -> Next.js standalone
+Database: MariaDB/MySQL

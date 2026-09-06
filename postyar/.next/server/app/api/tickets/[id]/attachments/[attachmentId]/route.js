@@ -1,0 +1,13 @@
+var R=require("../../../../../../chunks/[turbopack]_runtime.js")("server/app/api/tickets/[id]/attachments/[attachmentId]/route.js")
+R.c("server/chunks/[root-of-the-server]__72cb48d9._.js")
+R.c("server/chunks/[root-of-the-server]__807539cb._.js")
+R.c("server/chunks/src_lib_tickets_index_ts_23fb442b._.js")
+R.c("server/chunks/[root-of-the-server]__dc2be300._.js")
+R.c("server/chunks/_eefaaa38._.js")
+R.c("server/chunks/[root-of-the-server]__ef1db664._.js")
+R.c("server/chunks/node_modules_next_f5199d09._.js")
+R.c("server/chunks/[root-of-the-server]__b5883d5c._.js")
+R.c("server/chunks/node_modules_next_dist_79f1aee4._.js")
+R.c("server/chunks/ce889_server_app_api_tickets_[id]_attachments_[attachmentId]_route_actions_807571ec.js")
+R.m(54003)
+module.exports=R.m(54003).exports

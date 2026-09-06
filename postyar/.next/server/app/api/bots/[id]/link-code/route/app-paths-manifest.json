@@ -1,0 +1,3 @@
+{
+  "/api/bots/[id]/link-code/route": "app/api/bots/[id]/link-code/route.js"
+}

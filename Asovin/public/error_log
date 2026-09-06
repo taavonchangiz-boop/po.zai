@@ -1,0 +1,141 @@
+[29-Aug-2026 17:10:47 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[29-Aug-2026 17:10:47 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[29-Aug-2026 17:10:47 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[29-Aug-2026 17:10:47 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[29-Aug-2026 17:10:47 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[29-Aug-2026 17:10:47 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[29-Aug-2026 17:10:47 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[29-Aug-2026 17:10:47 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[29-Aug-2026 17:10:47 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[29-Aug-2026 17:10:47 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[30-Aug-2026 18:30:31 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[30-Aug-2026 18:30:31 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[30-Aug-2026 18:30:31 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[30-Aug-2026 18:30:31 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[30-Aug-2026 18:30:31 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[30-Aug-2026 18:30:31 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[30-Aug-2026 18:30:31 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[30-Aug-2026 18:30:31 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[30-Aug-2026 18:30:31 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[30-Aug-2026 18:30:31 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[30-Aug-2026 18:30:38 Asia/Tehran] [Postyar Router] FATAL: Error: Call to undefined method WHCM\Core\Auth::requireLogin() in /home/asovinir/public_html/app/Controllers/MainController.php:2635 | Trace: #0 [internal function]: WHCM\Controllers\MainController->getPushStatus()
+#1 /home/asovinir/public_html/app/Core/Router.php(98): call_user_func_array()
+#2 /home/asovinir/public_html/app/Core/Router.php(76): WHCM\Core\Router::execute()
+#3 /home/asovinir/public_html/public/index.php(189): WHCM\Core\Router::dispatch()
+#4 {main}
+[30-Aug-2026 18:31:23 Asia/Tehran] [Postyar Router] FATAL: Error: Call to undefined method WHCM\Core\Auth::requireLogin() in /home/asovinir/public_html/app/Controllers/MainController.php:2635 | Trace: #0 [internal function]: WHCM\Controllers\MainController->getPushStatus()
+#1 /home/asovinir/public_html/app/Core/Router.php(98): call_user_func_array()
+#2 /home/asovinir/public_html/app/Core/Router.php(76): WHCM\Core\Router::execute()
+#3 /home/asovinir/public_html/public/index.php(189): WHCM\Core\Router::dispatch()
+#4 {main}
+[06-Sep-2026 02:58:34 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[06-Sep-2026 02:58:34 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[06-Sep-2026 02:58:34 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[06-Sep-2026 02:58:34 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[06-Sep-2026 02:58:34 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[06-Sep-2026 02:58:34 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[06-Sep-2026 02:58:34 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[06-Sep-2026 02:58:34 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[06-Sep-2026 02:58:34 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[06-Sep-2026 02:58:34 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[06-Sep-2026 02:58:42 Asia/Tehran] [Postyar Router] FATAL: Error: Call to undefined method WHCM\Core\Auth::requireLogin() in /home/asovinir/public_html/app/Controllers/MainController.php:2635 | Trace: #0 [internal function]: WHCM\Controllers\MainController->getPushStatus()
+#1 /home/asovinir/public_html/app/Core/Router.php(98): call_user_func_array()
+#2 /home/asovinir/public_html/app/Core/Router.php(76): WHCM\Core\Router::execute()
+#3 /home/asovinir/public_html/public/index.php(189): WHCM\Core\Router::dispatch()
+#4 {main}
+[06-Sep-2026 03:00:02 Asia/Tehran] [Postyar Router] FATAL: Error: Call to undefined method WHCM\Core\Auth::requireLogin() in /home/asovinir/public_html/app/Controllers/MainController.php:2635 | Trace: #0 [internal function]: WHCM\Controllers\MainController->getPushStatus()
+#1 /home/asovinir/public_html/app/Core/Router.php(98): call_user_func_array()
+#2 /home/asovinir/public_html/app/Core/Router.php(76): WHCM\Core\Router::execute()
+#3 /home/asovinir/public_html/public/index.php(189): WHCM\Core\Router::dispatch()
+#4 {main}
+[06-Sep-2026 03:06:19 Asia/Tehran] [Postyar Router] FATAL: Error: Call to undefined method WHCM\Core\Auth::requireLogin() in /home/asovinir/public_html/app/Controllers/MainController.php:2635 | Trace: #0 [internal function]: WHCM\Controllers\MainController->getPushStatus()
+#1 /home/asovinir/public_html/app/Core/Router.php(98): call_user_func_array()
+#2 /home/asovinir/public_html/app/Core/Router.php(76): WHCM\Core\Router::execute()
+#3 /home/asovinir/public_html/public/index.php(189): WHCM\Core\Router::dispatch()
+#4 {main}
+[06-Sep-2026 03:06:31 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[06-Sep-2026 03:06:31 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[06-Sep-2026 03:06:31 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[06-Sep-2026 03:06:31 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[06-Sep-2026 03:06:31 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[06-Sep-2026 03:06:31 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[06-Sep-2026 03:06:31 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[06-Sep-2026 03:06:31 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[06-Sep-2026 03:06:31 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[06-Sep-2026 03:06:31 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[06-Sep-2026 03:06:46 Asia/Tehran] [Postyar Router] FATAL: Error: Call to undefined method WHCM\Core\Auth::requireLogin() in /home/asovinir/public_html/app/Controllers/MainController.php:2635 | Trace: #0 [internal function]: WHCM\Controllers\MainController->getPushStatus()
+#1 /home/asovinir/public_html/app/Core/Router.php(98): call_user_func_array()
+#2 /home/asovinir/public_html/app/Core/Router.php(76): WHCM\Core\Router::execute()
+#3 /home/asovinir/public_html/public/index.php(189): WHCM\Core\Router::dispatch()
+#4 {main}
+[06-Sep-2026 03:07:47 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[06-Sep-2026 03:07:47 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[06-Sep-2026 03:07:47 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[06-Sep-2026 03:07:47 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[06-Sep-2026 03:07:47 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[06-Sep-2026 03:07:47 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[06-Sep-2026 03:07:47 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[06-Sep-2026 03:07:47 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[06-Sep-2026 03:07:47 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[06-Sep-2026 03:07:47 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[06-Sep-2026 03:13:08 Asia/Tehran] [Postyar Router] FATAL: Error: Call to undefined method WHCM\Core\Auth::requireLogin() in /home/asovinir/public_html/app/Controllers/MainController.php:2635 | Trace: #0 [internal function]: WHCM\Controllers\MainController->getPushStatus()
+#1 /home/asovinir/public_html/app/Core/Router.php(98): call_user_func_array()
+#2 /home/asovinir/public_html/app/Core/Router.php(76): WHCM\Core\Router::execute()
+#3 /home/asovinir/public_html/public/index.php(189): WHCM\Core\Router::dispatch()
+#4 {main}
+[06-Sep-2026 03:14:08 Asia/Tehran] [Postyar Router] FATAL: Error: Call to undefined method WHCM\Core\Auth::requireLogin() in /home/asovinir/public_html/app/Controllers/MainController.php:2635 | Trace: #0 [internal function]: WHCM\Controllers\MainController->getPushStatus()
+#1 /home/asovinir/public_html/app/Core/Router.php(98): call_user_func_array()
+#2 /home/asovinir/public_html/app/Core/Router.php(76): WHCM\Core\Router::execute()
+#3 /home/asovinir/public_html/public/index.php(189): WHCM\Core\Router::dispatch()
+#4 {main}
+[06-Sep-2026 03:14:11 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[06-Sep-2026 03:14:11 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[06-Sep-2026 03:14:11 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[06-Sep-2026 03:14:11 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[06-Sep-2026 03:14:11 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[06-Sep-2026 03:14:11 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[06-Sep-2026 03:14:11 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[06-Sep-2026 03:14:11 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[06-Sep-2026 03:14:11 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[06-Sep-2026 03:14:11 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[06-Sep-2026 03:14:22 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[06-Sep-2026 03:14:22 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[06-Sep-2026 03:14:22 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[06-Sep-2026 03:14:22 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[06-Sep-2026 03:14:22 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[06-Sep-2026 03:14:22 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[06-Sep-2026 03:14:22 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[06-Sep-2026 03:14:22 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[06-Sep-2026 03:14:22 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[06-Sep-2026 03:14:22 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[06-Sep-2026 03:14:29 Asia/Tehran] [Postyar Router] FATAL: Error: Call to undefined method WHCM\Core\Auth::requireLogin() in /home/asovinir/public_html/app/Controllers/MainController.php:2635 | Trace: #0 [internal function]: WHCM\Controllers\MainController->getPushStatus()
+#1 /home/asovinir/public_html/app/Core/Router.php(98): call_user_func_array()
+#2 /home/asovinir/public_html/app/Core/Router.php(76): WHCM\Core\Router::execute()
+#3 /home/asovinir/public_html/public/index.php(189): WHCM\Core\Router::dispatch()
+#4 {main}
+[06-Sep-2026 15:12:08 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[06-Sep-2026 15:12:08 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[06-Sep-2026 15:12:08 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[06-Sep-2026 15:12:08 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[06-Sep-2026 15:12:08 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[06-Sep-2026 15:12:08 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[06-Sep-2026 15:12:08 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[06-Sep-2026 15:12:08 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[06-Sep-2026 15:12:08 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[06-Sep-2026 15:12:08 Asia/Tehran] PHP Warning:  Undefined array key "subject" in /home/asovinir/public_html/app/Views/partials/admin-email-settings.php on line 149
+[06-Sep-2026 15:12:14 Asia/Tehran] [Postyar Router] FATAL: Error: Call to undefined method WHCM\Core\Auth::requireLogin() in /home/asovinir/public_html/app/Controllers/MainController.php:2635 | Trace: #0 [internal function]: WHCM\Controllers\MainController->getPushStatus()
+#1 /home/asovinir/public_html/app/Core/Router.php(98): call_user_func_array()
+#2 /home/asovinir/public_html/app/Core/Router.php(76): WHCM\Core\Router::execute()
+#3 /home/asovinir/public_html/public/index.php(189): WHCM\Core\Router::dispatch()
+#4 {main}
+[06-Sep-2026 15:12:47 Asia/Tehran] [Postyar Router] FATAL: Error: Call to undefined method WHCM\Core\Auth::requireLogin() in /home/asovinir/public_html/app/Controllers/MainController.php:2635 | Trace: #0 [internal function]: WHCM\Controllers\MainController->getPushStatus()
+#1 /home/asovinir/public_html/app/Core/Router.php(98): call_user_func_array()
+#2 /home/asovinir/public_html/app/Core/Router.php(76): WHCM\Core\Router::execute()
+#3 /home/asovinir/public_html/public/index.php(189): WHCM\Core\Router::dispatch()
+#4 {main}
+[06-Sep-2026 15:13:19 Asia/Tehran] [Postyar] Queue process error: SQLSTATE[HY000]: General error: 5 database is locked
+[06-Sep-2026 15:13:22 Asia/Tehran] [Postyar Router] FATAL: Error: Call to undefined method WHCM\Core\Auth::requireLogin() in /home/asovinir/public_html/app/Controllers/MainController.php:2635 | Trace: #0 [internal function]: WHCM\Controllers\MainController->getPushStatus()
+#1 /home/asovinir/public_html/app/Core/Router.php(98): call_user_func_array()
+#2 /home/asovinir/public_html/app/Core/Router.php(76): WHCM\Core\Router::execute()
+#3 /home/asovinir/public_html/public/index.php(189): WHCM\Core\Router::dispatch()
+#4 {main}

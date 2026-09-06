@@ -1,0 +1,3 @@
+{
+  "/api/payments/bank/route": "app/api/payments/bank/route.js"
+}
